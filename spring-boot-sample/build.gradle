@@ -1,0 +1,54 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id "org.springframework.boot" version "1.5.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.0.RELEASE"
+
+}
+apply plugin: 'docker'
+
+group 'com.shinko'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+jar {
+    baseName = 'spring-app'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}
+
+task runDocker() {
+    
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    testCompile("junit:junit")
+}
