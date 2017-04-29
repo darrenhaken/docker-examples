@@ -1,14 +1,17 @@
 version: '3'
 services:
   web:
-    build: .
+    image: springbootsample_web:1.0
+    build: ./spring-boot-sample
     ports:
       - "8080:8080"
+    links:
+      - redis
     depends_on:
       - redis
   redis:
     image: "redis:alpine"
-#  mongodb:
-#    image: "mongo"
+    ports:
+      - "6379:6379"
 volumes:
   data:
