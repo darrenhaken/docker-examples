@@ -1,5 +1,9 @@
 version: '3'
 services:
+  flask:
+    build: ./python-flask-sample
+    ports:
+     - "5000:5000"
   web:
     image: springbootsample_web:1.0
     build: ./spring-boot-sample
@@ -9,9 +13,15 @@ services:
       - redis
     depends_on:
       - redis
+    networks:
+      - shinkonetwork
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+    networks:
+      - shinkonetwork
 volumes:
   data:
+networks:
+  shinkonetwork:
