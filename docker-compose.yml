@@ -1,9 +1,17 @@
 version: '3'
 services:
   flask:
+    image: springbootsample_flask:1.0
     build: ./python-flask-sample
     ports:
      - "5000:5000"
+    deploy:
+      replicas: 4
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
   web:
     image: springbootsample_web:1.0
     build: ./spring-boot-sample
@@ -15,13 +23,20 @@ services:
       - redis
     networks:
       - shinkonetwork
+    deploy:
+      replicas: 4
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
     networks:
       - shinkonetwork
-volumes:
-  data:
+#volumes:
+#  data:
 networks:
   shinkonetwork:
