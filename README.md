@@ -1,7 +1,9 @@
 # docker-examples
-Docker examples demonstrating it's capabilities with Java applications
+Docker examples demonstrating it's capabilities running multiple applications at the same time
 
 ## Docker guide
+
+#### 1. Local run
 
 Run Spring Boot locally (via IDE)
 
@@ -11,14 +13,17 @@ docker-compose up
 docker ps
 ```
 
-Browse to http://localhost:8080
+[Browse to localhost:8080](http://localhost:8080 "Google's Homepage")
 
-#### Change Spring Boot  app to return different string result and show version 1.1
+#### Docker image versioning
 Increase the tag to 1.1 in Docker compose
 ``` bash
 docker-compose build
 docker-compose up
 ```
+[Browse to localhost:8080](http://localhost:8080 "Spring Boot Homepage")
+
+[Browse to localhost:5000](http://localhost:5000 "Flask Homepage")
 
 ### Orchestration
 
@@ -32,6 +37,7 @@ docker-machine ip manager1
 docker-machine ssh manager1
 
 #Initialise swarm with node as leader
+#Will skip this step as I did it ahead of time
 docker swarm init --advertise-addr <MANAGER-IP>
 
 #Show nodes connected to swarm
@@ -50,7 +56,7 @@ docker swarm join \
 ```
 
 Deploy stack to swarm
-``` bash
+
 # Change Docker Daemon 
 eval $(docker-machine env manager1)
 
@@ -79,4 +85,6 @@ docker service update --image <imagename>:<version> web
 docker service rm helloworld_redis
 docker stop $(docker ps -a -q)
 
-```
+Removing services
+docker service rm helloworld_flask helloworld_web helloworld_redis
+
