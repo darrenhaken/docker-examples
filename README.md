@@ -13,7 +13,9 @@ docker-compose up
 docker ps
 ```
 
-[Browse to localhost:8080](http://localhost:8080 "Google's Homepage")
+[Browse to Java app](http://localhost:8080 "Java App")
+
+[Browse to Python app](http://localhost:5000 "Python App")
 
 #### Docker image versioning
 Increase the tag to 1.1 in Docker compose
@@ -57,34 +59,37 @@ docker swarm join \
 
 Deploy stack to swarm
 
-# Change Docker Daemon 
+#### Change Docker Daemon 
 eval $(docker-machine env manager1)
 
-# Build cluster on Docker on manager1
+#### Build cluster on Docker on manager1
 docker-compose build
 
-# Set the docker cli to use manager1
+#### Set the docker cli to use manager1
 docker-machine env manager1
 
-# Optional but might be needed
+#### Optional but might be needed
 docker-machine regenerate-certs manager1
 
-# Deploy cluster to manager1
+#### Deploy cluster to manager1
 docker stack deploy --compose-file docker-compose.yml helloworld 
 
-# On the Docker manager
+#### On the Docker manager
 docker service ls
 
-# Lets scale Web up
+#### Lets scale Web up
 docker service scale helloworld_web=8
 
-# Applying rolling updates
+#### Applying rolling updates
 docker service update --image <imagename>:<version> web
 
-# Let's kill the containers
+#### Let's kill the containers
 docker service rm helloworld_redis
 docker stop $(docker ps -a -q)
 
-Removing services
+#### Removing services
 docker service rm helloworld_flask helloworld_web helloworld_redis
+
+#### Revert docker daemon back to Docker for Mac
+eval $(docker-machine env -u)
 
